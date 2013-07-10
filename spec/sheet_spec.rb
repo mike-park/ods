@@ -16,63 +16,63 @@ describe Ods::Sheet do
 
     context "basic navigation" do
       context "first row" do
-        it { sheet[0,0].value.should == 'A' }
-        it { sheet[0,0].value.should be_kind_of(String) }
+        it { sheet[0, 0].should == 'A' }
+        it { sheet[0, 0].should be_kind_of(String) }
         it "have 4 columns" do
           sheet.rows[0].cols.count.should == 4
         end
         it "contains" do
           %w(A row of strings).each_with_index do |s, i|
-            sheet[0, i].value.should == s
+            sheet[0, i].should == s
           end
         end
       end
 
       context "second row" do
         (1..4).each do |i|
-          it { sheet[1,i-1].value.should == Date.new(2011, 1, i) }
-          it { sheet[1,i-1].value.should be_kind_of(Date) }
+          it { sheet[1, i-1].should == Date.new(2011, 1, i) }
+          it { sheet[1, i-1].should be_kind_of(Date) }
         end
       end
 
       context "third row integers" do
         (1..4).each do |i|
-          it { sheet[2,i-1].value.should == i }
-          it { sheet[2,i-1].value.should be_kind_of(Fixnum) }
+          it { sheet[2, i-1].should == i }
+          it { sheet[2, i-1].should be_kind_of(Fixnum) }
         end
       end
 
       context "forth row matches third row" do
         (1..4).each do |i|
-          it { sheet[3,i-1].value.should == i }
-          it { sheet[3,i-1].value.should be_kind_of(Fixnum) }
+          it { sheet[3, i-1].should == i }
+          it { sheet[3, i-1].should be_kind_of(Fixnum) }
         end
       end
 
       context "row five has mixed float&ints" do
-        it { sheet[4,0].value.should == 0 }
-        it { sheet[4,0].value.should be_kind_of(Fixnum) }
+        it { sheet[4, 0].should == 0 }
+        it { sheet[4, 0].should be_kind_of(Fixnum) }
 
-        it { sheet[4,1].value.should == -1.1 }
-        it { sheet[4,1].value.should be_kind_of(Float) }
+        it { sheet[4, 1].should == -1.1 }
+        it { sheet[4, 1].should be_kind_of(Float) }
 
-        it { sheet[4,2].value.should == 2.2 }
-        it { sheet[4,2].value.should be_kind_of(Float) }
+        it { sheet[4, 2].should == 2.2 }
+        it { sheet[4, 2].should be_kind_of(Float) }
 
-        it { sheet[4,3].value.should == 3 }
-        it { sheet[4,3].value.should be_kind_of(Fixnum) }
+        it { sheet[4, 3].should == 3 }
+        it { sheet[4, 3].should be_kind_of(Fixnum) }
       end
 
       context "row 6 has booleans" do
-        it { sheet[5,0].value.should == true }
-        it { sheet[5,0].value.should be_kind_of(TrueClass) }
+        it { sheet[5, 0].should == true }
+        it { sheet[5, 0].should be_kind_of(TrueClass) }
 
-        it { sheet[5,1].value.should == false }
-        it { sheet[5,1].value.should be_kind_of(FalseClass) }
+        it { sheet[5, 1].should == false }
+        it { sheet[5, 1].should be_kind_of(FalseClass) }
       end
 
       context "out of bounds" do
-        it { sheet[1000,100].should_not be }
+        it { sheet[1000, 100].should_not be }
       end
     end
   end
@@ -85,15 +85,15 @@ describe Ods::Sheet do
     context "column A" do
       (0..9).each do |row|
         context "row #{row}" do
-          it { sheet[row, 0].value.should == "A#{row+1}" }
+          it { sheet[row, 0].should == "A#{row+1}" }
         end
       end
 
-      it { sheet[10,0].should_not be }
+      it { sheet[10, 0].should_not be }
     end
 
     context "bottom right" do
-      it { sheet[9, 3].value.should == 'D10' }
+      it { sheet[9, 3].should == 'D10' }
     end
   end
 end

@@ -12,32 +12,32 @@ module Ods
 
     # access by (0,0) = top left
     def [](row_index, col_index)
-      row = rows[row_index]
-      if row.kind_of?(Array)
-        puts "bad #{row_index} #{col_index}"
-        #puts row
-      end
-      row.nil? ? nil : row.cols[col_index]
+      row = data[row_index]
+      row && row[col_index]
     end
 
     def rows
       return @rows if @rows
       @rows = []
       content.xpath('descendant::table:table-row').each do |node|
-        a_row =  Row.new(node, self)
-        repeat = node['table:number-rows-repeated'] || 1
-        repeat.to_i.times do
-          @rows << a_row
+        a_row = Row.new(node, self)
+        if a_row.data.length > 0
+          repeat = node['table:number-rows-repeated'] || 1
+          repeat.to_i.times do
+            @rows << a_row
+          end
         end
       end
       @rows
     end
 
+    def data
+      @data ||= rows.map(&:data).reject { |row| row.length == 0 }
+    end
+
     def csv
       CSV do |csv|
-        rows.each do |row|
-          csv << row.cols.map(&:value)
-        end
+        data.each { |row| csv << row }
       end
     end
   end
