@@ -19,20 +19,25 @@ module Ods
     def rows
       return @rows if @rows
       @rows = []
-      content.xpath('descendant::table:table-row').each do |node|
+      src_rows = content.xpath('descendant::table:table-row')
+
+      # ignore trailing empty rows
+      while (last_row = src_rows.last) && (Row.new(last_row, self).data.length == 0)
+        src_rows.pop
+      end
+
+      src_rows.each do |node|
         a_row = Row.new(node, self)
-        if a_row.data.length > 0
-          repeat = node['table:number-rows-repeated'] || 1
-          repeat.to_i.times do
-            @rows << a_row
-          end
+        repeat = node['table:number-rows-repeated'] || 1
+        repeat.to_i.times do
+          @rows << a_row
         end
       end
       @rows
     end
 
     def data
-      @data ||= rows.map(&:data).reject { |row| row.length == 0 }
+      @data ||= rows.map(&:data)
     end
 
     def csv
